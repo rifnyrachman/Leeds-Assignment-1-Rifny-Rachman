@@ -14,8 +14,23 @@ import csv
 #calculate processed time
 start = time.process_time()
 
+#setting the random seed for reproducability
+random.seed(0)
+
 #creating environment for the agents
 #reading data file for the environment
+environment=[]
+with open('in.txt', newline='') as f:
+    dataset = csv.reader(f, quoting = csv.QUOTE_NONNUMERIC)
+    for row in dataset:
+        rowlist=[]
+        for value in row:
+            #print(value)
+            rowlist.append(value)
+        environment.append(rowlist)
+        
+
+'''
 f = open("in.txt")
 environment = []
 for line in f:
@@ -26,19 +41,16 @@ for line in f:
     environment.append(rowlist)
 print(environment)
 f.close()
-
-#create data visualization for the environment
-plt.imshow(environment)
-plt.show()
-
+'''
 
 #create agent list
 agents=[]
 num_of_agents = 10
-num_of_iterations = 100
+num_of_iterations = 99
 for i in range(num_of_agents):
-    print("Agent-",i,":")
-    agents.append(agentframework.Agent())
+    agents.append(agentframework.Agent(environment))
+    print(agents[i])
+    #print("Agent-",i,":",agents[i].x,agents[i].y)
     
 #create distance function
 def distance_between(agents_row_a,agents_row_b):
@@ -49,19 +61,22 @@ print("Agents Posistion After Random Movement:")
 for j in range(num_of_iterations):
     for i in range(num_of_agents):
         agents[i].move()
+        agents[i].eat()
 
 #print the latest agents' position
 for i in range(num_of_agents):  
-    print("Agent-",i,":",agents[i].x,agents[i].y)
+    print(agents[i])
+    #print("Agent-",i,":",agents[i].x,agents[i].y)
     
     
 #call the distance function for all agents
 dist=[]
+print("Distance Between 2 Agents")
 for i in range(num_of_agents):
     for j in range(num_of_agents):
         if i!=j and i<j:
             distance_between(agents[i],agents[j])
-            print("distance between agent-",i,"and agent-",j,"is:",distance_between(agents[i],agents[j]))
+            print("agent-",i,"and agent-",j,"is:",distance_between(agents[i],agents[j]))
             dist.append(distance_between(agents[i],agents[j]))
         else:
             pass
@@ -73,9 +88,15 @@ print("min distance:",min(dist))
 #create visualisation
 plt.xlim(0,99)
 plt.ylim(0,99)
+plt.imshow(environment)
 for i in range(num_of_agents):
-    plt.scatter(agents[i].x,agents[i].y,c="blue")
+    plt.scatter(agents[i].x,agents[i].y)
 plt.show()
 
 end = time.process_time()
 print("time:",str(end-start))
+
+with open('dataout.csv', 'w', newline='') as f2:
+    writer = csv.writer(f2, delimiter=',')     
+    for row in environment:        
+        writer.writerow(row) # List of values.
