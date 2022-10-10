@@ -7,13 +7,31 @@ Created on Wed Sep 28 17:54:26 2022
 
 #import packages
 import random
-import operator
 import matplotlib.pyplot as plt
 import time
 import agentframework
+import csv
 
 #calculate processed time
 start = time.process_time()
+
+#creating environment for the agents
+#reading data file for the environment
+f = open("in.txt")
+environment = []
+for line in f:
+    parsed_line = str.split(line,",")
+    rowlist = []
+    for word in parsed_line:
+        rowlist.append(float(word))
+    environment.append(rowlist)
+print(environment)
+f.close()
+
+#create data visualization for the environment
+plt.imshow(environment)
+plt.show()
+
 
 #create agent list
 agents=[]
@@ -52,7 +70,7 @@ for i in range(num_of_agents):
 #show max and min distances
 print("max distance:",max(dist))
 print("min distance:",min(dist))  
-     
+ 
 #create visualisation
 plt.xlim(0,99)
 plt.ylim(0,99)
