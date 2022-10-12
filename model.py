@@ -46,11 +46,15 @@ f.close()
 #create agent list
 agents=[]
 num_of_agents = 10
-num_of_iterations = 99
+num_of_iterations = 100
+neighbourhood = 20
 for i in range(num_of_agents):
-    agents.append(agentframework.Agent(environment))
+    agents.append(agentframework.Agent(i, agents,environment))
     print(agents[i])
     #print("Agent-",i,":",agents[i].x,agents[i].y)
+    
+#Test the communication by printing agent-1 from agent-0
+print("Communicating test, calling from agent-0:\n",agents[0].agents[1])
     
 #create distance function
 def distance_between(agents_row_a,agents_row_b):
@@ -59,9 +63,11 @@ def distance_between(agents_row_a,agents_row_b):
 #create random walk for num_of_iterations times
 print("Agents Posistion After Random Movement:")
 for j in range(num_of_iterations):
+    random.shuffle(agents) #shuffling the agents representation
     for i in range(num_of_agents):
         agents[i].move()
         agents[i].eat()
+        agents[i].share_with_neighbourhoods(neighbourhood)
 
 #print the latest agents' position
 for i in range(num_of_agents):  
