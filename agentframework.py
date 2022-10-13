@@ -16,9 +16,9 @@ class Agent():
         self.x = random.randint(0,99)
         self.y = random.randint(0,99)
         
-    def __str__(self):
-        return "agent-" + str(self.i) + " ,store = " + str(self.store) \
-            + " ,position(x y) :" + str(self.x) + " " + str(self.y)
+    # def __str__(self):
+    #     return "agent-" + str(self.i) + " ,store = " + str(self.store) \
+    #         + " ,position(x y) :" + str(self.x) + " " + str(self.y)
     
     def move(self):
         if random.random()<0.5:
