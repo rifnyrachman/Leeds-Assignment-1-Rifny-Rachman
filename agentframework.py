@@ -8,13 +8,15 @@ Created on Fri Oct  7 04:41:45 2022
 import random
 
 class Agent():
-    def __init__(self,i,agents,environment):
+    def __init__(self,i,agents,environment,y,x):
         self.store = 0
         self.i = i
         self.agents = agents
         self.environment = environment
-        self.x = random.randint(0,99)
-        self.y = random.randint(0,99)
+        self.x = x
+        self.y = y
+        # self.x = random.randint(0,99)
+        # self.y = random.randint(0,99)
         
     # def __str__(self):
     #     return "agent-" + str(self.i) + " ,store = " + str(self.store) \

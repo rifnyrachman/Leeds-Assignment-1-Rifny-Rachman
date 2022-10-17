@@ -17,12 +17,23 @@ import csv
 import matplotlib
 matplotlib.use('TkAgg')
 import tkinter
+import requests
+import bs4
 
 #calculate processed time
 start = time.process_time()
 
 #setting the random seed for reproducability
 random.seed(0)
+
+#scraping the website and get html data to define agent's positions
+r = requests.get('https://www.geog.leeds.ac.uk/courses/computing/practicals/python/agent-framework/part9/data.html', verify=False)
+content = r.text
+soup = bs4.BeautifulSoup(content, 'html.parser')
+td_ys = soup.find_all(attrs={"class" : "y"})
+td_xs = soup.find_all(attrs={"class" : "x"})
+print(td_ys)
+print(td_xs)
 
 #creating environment for the agents
 #reading data file for the environment
@@ -38,42 +49,55 @@ with open('in.txt', newline='') as f:
 
 #create agent list
 agents=[]
-num_of_agents = 10
+num_of_agents = 30
 num_of_iterations = 100
 neighbourhood = 20
 
 fig = matplotlib.pyplot.figure(figsize=(7, 7)) #initialize animation
 ax = fig.add_axes([0, 0, 1, 1])
 
+#Generate each agent's position within agent list using iteration
+#Agent's positions is based on the html data
 for i in range(num_of_agents):
-    agents.append(agentframework.Agent(i, agents, environment))
+    #in case the number of agents is more than what is provided in html data,
+    #it generates random number for the rest
+    if (i in range(len(td_xs))):
+        x = int(td_xs[i].text)
+    else:
+        x = random.randint(0,99)
+    if (i in range(len(td_ys))):        
+        y = int(td_ys[i].text)
+    else:
+        y = random.randint(0,99)
+    agents.append(agentframework.Agent(i,agents,environment,y,x))
+    
     print("agent-" + str(i) + " ,store = " + str(agents[i].store) \
         + " ,position(x y) :" + str(agents[i].x) + " " + str(agents[i].y))
     #print("Agent-",i,":",agents[i].x,agents[i].y)
 
-#Test the communication by printing agent-1 from agent-0
+#random.shuffle(agents) #to shuffle the agents representation
+
+#Test the communication between agents by printing agent-1 from agent-0
 print("Communicating test, calling from agent-0:\n",agents[0].agents[1].x,agents[0].agents[1].y)
 
-#create animation function to attach in a button
+#create animation function to attach in GUI "Run Model" button
 def run():
     animation = matplotlib.animation.FuncAnimation(fig, update, frames=gen_function, repeat=False)
     canvas.draw()
     
-#create distance function
+#create distance function between two agents
 def distance_between(agents_row_a,agents_row_b):
     return ((agents_row_a.x-agents_row_b.x)**2+(agents_row_a.y-agents_row_b.y)**2)**0.5
 
 print("Agents Posistion After Random Movement:")
 
-#Creating animation function
+#Creating iteration function for animation
 carry_on = True	
 def update(frame_number):
     print("iteration", frame_number)
     fig.clear()
     global carry_on
     
-#for j in range(num_of_iterations):
-    #random.shuffle(agents) #shuffling the agents representation
     for i in range(num_of_agents):
         #set agents' behaviour
         agents[i].move()
@@ -141,6 +165,7 @@ print("min distance:",round(min(dist),2))
 end = time.process_time()
 print("time:",str(end-start))
 
+#Create a csv file as an output from the program
 with open('dataout.csv', 'w', newline='') as f2:
     writer = csv.writer(f2, delimiter=',')     
     for row in environment:        
