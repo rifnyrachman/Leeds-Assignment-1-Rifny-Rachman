@@ -2,6 +2,9 @@
 Created on Wed Sep 28 17:54:26 2022
 
 @author: rifny
+
+NOTE: Before running, to enable the pop-out animation type '%matplotlib qt'
+in console window, then click enter. This is only needed once at the beginning.
 """
 
 #import packages
@@ -11,6 +14,9 @@ import matplotlib.animation
 import time
 import agentframework
 import csv
+import matplotlib
+matplotlib.use('TkAgg')
+import tkinter
 
 #calculate processed time
 start = time.process_time()
@@ -47,6 +53,11 @@ for i in range(num_of_agents):
 
 #Test the communication by printing agent-1 from agent-0
 print("Communicating test, calling from agent-0:\n",agents[0].agents[1].x,agents[0].agents[1].y)
+
+#create animation function to attach in a button
+def run():
+    animation = matplotlib.animation.FuncAnimation(fig, update, frames=gen_function, repeat=False)
+    canvas.draw()
     
 #create distance function
 def distance_between(agents_row_a,agents_row_b):
@@ -91,7 +102,9 @@ def update(frame_number):
     plt.imshow(environment)
     for i in range(num_of_agents):
         plt.scatter(agents[i].x,agents[i].y)
-
+    #plt.show()
+    canvas.draw()
+    
 def gen_function(b = [0]):
     a = 0
     global carry_on #Not actually needed as we're not assigning, but clearer
@@ -102,8 +115,7 @@ def gen_function(b = [0]):
 #calling animation module
 # animation = matplotlib.animation.FuncAnimation(
 #     fig, update, interval=1, repeat=False, frames=num_of_iterations)
-animation = matplotlib.animation.FuncAnimation(fig, update, frames=gen_function, repeat=False)
-plt.show()
+#animation = matplotlib.animation.FuncAnimation(fig, update, frames=gen_function, repeat=False)
 
 #print the latest agents' position
 # for i in range(num_of_agents):  
@@ -133,3 +145,16 @@ with open('dataout.csv', 'w', newline='') as f2:
     writer = csv.writer(f2, delimiter=',')     
     for row in environment:        
         writer.writerow(row) # List of values.
+        
+#Create GUI
+root = tkinter.Tk()
+root.wm_title("Model")
+canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(fig, master=root)
+canvas._tkcanvas.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+menu = tkinter.Menu(root)
+root.config(menu=menu)
+model_menu = tkinter.Menu(menu)
+menu.add_cascade(label="Model", menu=model_menu)
+model_menu.add_command(label="Run model", command=run)   
+     
+tkinter.mainloop()
