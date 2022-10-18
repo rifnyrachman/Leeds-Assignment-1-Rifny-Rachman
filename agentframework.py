@@ -18,9 +18,9 @@ class Agent():
         # self.x = random.randint(0,99)
         # self.y = random.randint(0,99)
         
-    # def __str__(self):
-    #     return "agent-" + str(self.i) + " ,store = " + str(self.store) \
-    #         + " ,position(x y) :" + str(self.x) + " " + str(self.y)
+    def __str__(self):
+        return "agent-" + str(self.i) + " ,store = " + str(self.store) \
+            + " ,position(x y) :" + str(self.x) + " " + str(self.y)
     
     def move(self):
         if random.random()<0.5:
@@ -32,14 +32,17 @@ class Agent():
         else:
             self.y = (self.y-1)%100
     
-    # can you make it eat what is left?
+    # agents eat from the environment to add their stores
     def eat(self):
+        #each agent each 10 from the environment
         if self.environment[self.y][self.x] > 10:
             self.environment[self.y][self.x] -= 10
             self.store += 10
+        #in case environment stores is less then 10, it prevents negative value
         else:
             self.store += self.environment[self.y][self.x]
             self.environment[self.y][self.x] = 0
+        #agents get sick if they have eaten more than 100, then throw all stores up
         if self.store > 100:
             self.environment[self.y][self.x] += self.store
             self.store = 0
@@ -50,9 +53,10 @@ class Agent():
     def share_with_neighbourhoods(self,neighbourhood):
         for i in range(len(self.agents)):
             distance = self.distance_between(self.agents[i])
+            #each agent share the store with its neighbour
             if distance <= neighbourhood:
                 ave = (self.agents[i].store + self.store)/2
                 self.agents[i].store = ave
                 self.store = ave
-                #activate below code to see how much each agent shares to its neighbour
+                # activate below code to see how much each agent shares to its neighbour
                 #print("Agent-", i, "sharing: ", ave, ", distance: ",distance)

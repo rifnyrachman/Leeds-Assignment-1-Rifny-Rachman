@@ -32,8 +32,8 @@ content = r.text
 soup = bs4.BeautifulSoup(content, 'html.parser')
 td_ys = soup.find_all(attrs={"class" : "y"})
 td_xs = soup.find_all(attrs={"class" : "x"})
-print(td_ys)
-print(td_xs)
+#print(td_ys) #uncomment to print y column
+#print(td_xs) #uncomment to print x column
 
 #creating environment for the agents
 #reading data file for the environment
@@ -89,37 +89,33 @@ def run():
 def distance_between(agents_row_a,agents_row_b):
     return ((agents_row_a.x-agents_row_b.x)**2+(agents_row_a.y-agents_row_b.y)**2)**0.5
 
-print("Agents Posistion After Random Movement:")
 
 #Creating iteration function for animation
 carry_on = True	
 def update(frame_number):
-    print("iteration", frame_number)
+    print("\n =========Agent's position at iteration-", frame_number,"=========")
     fig.clear()
     global carry_on
     
     for i in range(num_of_agents):
         #set agents' behaviour
-        agents[i].move()
-        agents[i].eat()
-        agents[i].share_with_neighbourhoods(neighbourhood)
-        #print agents' position per iteration
-        print("agent-" + str(i) + " ,store = " + str(round(agents[i].store,2)) \
-            + " ,position(x y) :" + str(agents[i].x) + " " + str(agents[i].y))    
-   
+        #Creating stopping condition when agent's store >= 80
+        if agents[i].store < 80:
+            agents[i].move()
+            agents[i].eat()
+            agents[i].share_with_neighbourhoods(neighbourhood)
+            #print agents' position per iteration
+            print("agent-" + str(i) + " ,store = " + str(round(agents[i].store,2)) \
+                + " ,position(x y) :" + str(agents[i].x) + " " + str(agents[i].y))    
+        else:
+            carry_on = False
+                    
+            
     #Creating random stopping condition
     # if random.random() < 0.1:
     #     carry_on = False
     #     print("stopping condition")
-    
-    #Creating stopping condition when agent's store > 80
-    #Since the agent's store starts from 0 then increasing, it is better to set
-    #stopping condition in ">" to allow some movement before stopping
-    for i in range(num_of_agents):
-        if agents[i].store > 80:
-            carry_on = False
-            print("Stopping Condition at frame-", frame_number)
-        
+
     #create visualisation
     plt.xlim(0,99)
     plt.ylim(0,99)
@@ -128,6 +124,9 @@ def update(frame_number):
         plt.scatter(agents[i].x,agents[i].y)
     #plt.show()
     canvas.draw()
+    
+    if agents[i].store >= 80:
+        print("\n ///////Stopping Condition at frame-", frame_number,"///////")
     
 def gen_function(b = [0]):
     a = 0
@@ -181,5 +180,5 @@ root.config(menu=menu)
 model_menu = tkinter.Menu(menu)
 menu.add_cascade(label="Model", menu=model_menu)
 model_menu.add_command(label="Run model", command=run)   
-     
+  
 tkinter.mainloop()
