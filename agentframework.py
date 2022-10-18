@@ -23,6 +23,7 @@ class Agent():
             + " ,position(x y) :" + str(self.x) + " " + str(self.y)
     
     def move(self):
+        #Agents move randomly by a step
         if random.random()<0.5:
             self.x = (self.x+1)%100
         else:
@@ -31,6 +32,18 @@ class Agent():
             self.y = (self.y+1)%100
         else:
             self.y = (self.y-1)%100
+            
+        #Agents move quicker (by +/-5 steps) if they have more resources (>60)
+        if self.store > 60:
+            if random.random()<0.5:
+                self.x = (self.x+5)%100
+            else:
+                self.x = (self.x-5)%100
+            if random.random()<0.5:
+                self.y = (self.y+5)%100
+            else:
+                self.y = (self.y-5)%100            
+
     
     # agents eat from the environment to add their stores
     def eat(self):
@@ -42,11 +55,13 @@ class Agent():
         else:
             self.store += self.environment[self.y][self.x]
             self.environment[self.y][self.x] = 0
+            
         #agents get sick if they have eaten more than 100, then throw all stores up
         if self.store > 100:
             self.environment[self.y][self.x] += self.store
             self.store = 0
-            
+        
+        
     def distance_between(self,agents_row_b):
         return ((self.x-agents_row_b.x)**2+(self.y-agents_row_b.y)**2)**0.5
             
@@ -60,3 +75,8 @@ class Agent():
                 self.store = ave
                 # activate below code to see how much each agent shares to its neighbour
                 #print("Agent-", i, "sharing: ", ave, ", distance: ",distance)
+                
+            #steal more resources from others if they are low
+            if (self.store < 40) and (self.agents[i].store > 40):
+                self.store += 20
+                self.agents[i].store -= 20

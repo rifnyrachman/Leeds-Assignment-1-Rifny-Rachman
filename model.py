@@ -58,6 +58,7 @@ ax = fig.add_axes([0, 0, 1, 1])
 
 #Generate each agent's position within agent list using iteration
 #Agent's positions is based on the html data
+print("Agents' Initial Positions:")
 for i in range(num_of_agents):
     #in case the number of agents is more than what is provided in html data,
     #it generates random number for the rest
@@ -78,7 +79,7 @@ for i in range(num_of_agents):
 #random.shuffle(agents) #to shuffle the agents representation
 
 #Test the communication between agents by printing agent-1 from agent-0
-print("Communicating test, calling from agent-0:\n",agents[0].agents[1].x,agents[0].agents[1].y)
+print("\n\nCommunicating test, calling from agent-0:\n",agents[0].agents[1].x,agents[0].agents[1].y)
 
 #create animation function to attach in GUI "Run Model" button
 def run():
@@ -99,8 +100,8 @@ def update(frame_number):
     
     for i in range(num_of_agents):
         #set agents' behaviour
-        #Creating stopping condition when agent's store >= 80
-        if agents[i].store < 80:
+        #Creating stopping condition when agent's store >= 100
+        if agents[i].store < 100:
             agents[i].move()
             agents[i].eat()
             agents[i].share_with_neighbourhoods(neighbourhood)
@@ -109,7 +110,7 @@ def update(frame_number):
                 + " ,position(x y) :" + str(agents[i].x) + " " + str(agents[i].y))    
         else:
             carry_on = False
-                    
+            print("\n ///////Stopping Condition at frame-", frame_number,"///////")                    
             
     #Creating random stopping condition
     # if random.random() < 0.1:
@@ -125,8 +126,8 @@ def update(frame_number):
     #plt.show()
     canvas.draw()
     
-    if agents[i].store >= 80:
-        print("\n ///////Stopping Condition at frame-", frame_number,"///////")
+    # if agents[i].store >= 100:
+    #     print("\n ///////Stopping Condition at frame-", frame_number,"///////")
     
 def gen_function(b = [0]):
     a = 0
@@ -147,7 +148,7 @@ def gen_function(b = [0]):
     
 #call the distance function for all agents
 dist=[]
-print("Distance Between 2 Agents:")
+print("\n\nDistance Between 2 Agents:")
 for i in range(num_of_agents):
     for j in range(num_of_agents):
         if i!=j and i<j:
@@ -158,11 +159,11 @@ for i in range(num_of_agents):
             pass
     
 #show max and min distances
-print("max distance:",round(max(dist),2))
-print("min distance:",round(min(dist),2))  
+print("\nmax distance:",round(max(dist),2))
+print("\nmin distance:",round(min(dist),2))  
  
 end = time.process_time()
-print("time:",str(end-start))
+print("\nprocessing time:",str(end-start))
 
 #Create a csv file as an output from the program
 with open('dataout.csv', 'w', newline='') as f2:
