@@ -79,13 +79,14 @@ for i in range(num_of_agents):
 #random.shuffle(agents) #to shuffle the agents representation
 
 #Test the communication between agents by printing agent-1 from agent-0
-print("\n\nCommunicating test, calling from agent-0:\n",agents[0].agents[1].x,agents[0].agents[1].y)
+print("\n\nCommunicating test, calling from agent-0:\n",
+      "agent-1 , position(x y): ",agents[0].agents[1].x,agents[0].agents[1].y)
 
 #create animation function to attach in GUI "Run Model" button
 def run():
     animation = matplotlib.animation.FuncAnimation(fig, update, frames=gen_function, repeat=False)
     canvas.draw()
-    
+
 #create distance function between two agents
 def distance_between(agents_row_a,agents_row_b):
     return ((agents_row_a.x-agents_row_b.x)**2+(agents_row_a.y-agents_row_b.y)**2)**0.5
@@ -100,8 +101,8 @@ def update(frame_number):
     
     for i in range(num_of_agents):
         #set agents' behaviour
-        #Creating stopping condition when agent's store >= 100
-        if agents[i].store < 100:
+        #Creating stopping condition when agent's store >= 80
+        if agents[i].store < 80:
             agents[i].move()
             agents[i].eat()
             agents[i].share_with_neighbourhoods(neighbourhood)
@@ -110,7 +111,6 @@ def update(frame_number):
                 + " ,position(x y) :" + str(agents[i].x) + " " + str(agents[i].y))    
         else:
             carry_on = False
-            print("\n ///////Stopping Condition at frame-", frame_number,"///////")                    
             
     #Creating random stopping condition
     # if random.random() < 0.1:
@@ -126,16 +126,44 @@ def update(frame_number):
     #plt.show()
     canvas.draw()
     
-    # if agents[i].store >= 100:
-    #     print("\n ///////Stopping Condition at frame-", frame_number,"///////")
+    if agents[i].store >= 80:
+        print("\n ///////Stopping Condition at frame-", frame_number,"///////")
+    else:
+        pass
     
+#Create frames for animation
 def gen_function(b = [0]):
     a = 0
     global carry_on #Not actually needed as we're not assigning, but clearer
-    while (a < 10) & (carry_on) :
+    while (a < 20) & (carry_on) :
         yield a			# Returns control and waits next call.
         a = a + 1
-        
+
+#Create function for wolves that eat some nearest sheeps (agents)        
+def wolves():
+    print("===============================================\nAdding Wolves\n===============================================")
+    wolf_x=random.randint(0,99)
+    wolf_y=random.randint(0,99)
+    print("Wolf's position (x y) : ",wolf_x,wolf_y)
+    print("Remaining agents:")
+    for i in range(num_of_agents):
+        wolf_dist = ((wolf_x-agents[i].x)**2+(wolf_y-agents[i].y)**2)**0.5
+        if (wolf_dist < 50):
+            agents.remove(agents[i])
+        else:       
+            print("Agent-",i,", Distance with the wolf:", round(wolf_dist,2))
+
+#Create function that allows agents' breeding            
+def breed():
+    print("===============================================\nBreeding Agents\n===============================================")
+    print("Additional agents after breeding:")
+    for i in range(30,51):
+        x = random.randint(0,99)
+        y = random.randint(0,99)
+        agents.append(agentframework.Agent(i,agents,environment,y,x))
+        print ("Agent-",i, ",store =",agents[i].store,",Position (x y) : ",agents[i].x,agents[i].y)
+        num_of_agents == i
+           
 #calling animation module
 # animation = matplotlib.animation.FuncAnimation(
 #     fig, update, interval=1, repeat=False, frames=num_of_iterations)
@@ -160,7 +188,7 @@ for i in range(num_of_agents):
     
 #show max and min distances
 print("\nmax distance:",round(max(dist),2))
-print("\nmin distance:",round(min(dist),2))  
+print("min distance:",round(min(dist),2))  
  
 end = time.process_time()
 print("\nprocessing time:",str(end-start))
@@ -172,14 +200,16 @@ with open('dataout.csv', 'w', newline='') as f2:
         writer.writerow(row) # List of values.
         
 #Create GUI
-root = tkinter.Tk()
-root.wm_title("Model")
+root = tkinter.Tk() #create window
+root.wm_title("Welcome to Agent Based Modelling! ^^")
 canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(fig, master=root)
 canvas._tkcanvas.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 menu = tkinter.Menu(root)
 root.config(menu=menu)
 model_menu = tkinter.Menu(menu)
 menu.add_cascade(label="Model", menu=model_menu)
-model_menu.add_command(label="Run model", command=run)   
-  
+model_menu.add_command(label="Run Model", command=run)  
+model_menu.add_command(label="Add A Wolf", command=wolves)  #additional button
+model_menu.add_command(label="Breed Agents", command=breed) #additional button 
+
 tkinter.mainloop()
