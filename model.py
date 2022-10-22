@@ -58,7 +58,7 @@ ax = fig.add_axes([0, 0, 1, 1])
 
 #Generate each agent's position within agent list using iteration
 #Agent's positions is based on the html data
-print("Agents' Initial Positions:")
+
 for i in range(num_of_agents):
     #in case the number of agents is more than what is provided in html data,
     #it generates random number for the rest
@@ -72,26 +72,39 @@ for i in range(num_of_agents):
         y = random.randint(0,99)
     agents.append(agentframework.Agent(i,agents,environment,y,x))
     
-    print("agent-" + str(i) + " ,store = " + str(agents[i].store) \
-        + " ,position(x y) :" + str(agents[i].x) + " " + str(agents[i].y))
-    #print("Agent-",i,":",agents[i].x,agents[i].y)
+def init_position():    
+    print("\n===============================================\nAgents' Initial Positions:\n===============================================\n")
+    for i in range(num_of_agents):
+        print(agents[i])
+    
+#Test the communication between agents by printing agent-1 from agent-0
+def com_test():
+    print("\n===============================================\nCommunication test:\nCalling from agent-0:\n===============================================\n ",
+          agents[0].agents[1])
+
+def print_distance():
+    dist=[]
+    print("\n===============================================\nDistances Between 2 Agents:\n===============================================\n")
+    for i in range(num_of_agents):
+        for j in range(num_of_agents):
+            if i!=j and i<j:
+                distance_between = ((agents[i].x-agents[j].x)**2+(agents[i].y-agents[j].y)**2)**0.5
+                print("agent-",i,"and agent-",j,"is:",round(distance_between,2))
+                dist.append(distance_between)
+            else:
+                pass
+    
+#show max and min distances
+    print("\nmax distance:",round(max(dist),2))
+    print("min distance:",round(min(dist),2))  
 
 #random.shuffle(agents) #to shuffle the agents representation
-
-#Test the communication between agents by printing agent-1 from agent-0
-print("\n\nCommunicating test, calling from agent-0:\n",
-      "agent-1 , position(x y): ",agents[0].agents[1].x,agents[0].agents[1].y)
 
 #create animation function to attach in GUI "Run Model" button
 def run():
     animation = matplotlib.animation.FuncAnimation(fig, update, frames=gen_function, repeat=False)
     canvas.draw()
-
-#create distance function between two agents
-def distance_between(agents_row_a,agents_row_b):
-    return ((agents_row_a.x-agents_row_b.x)**2+(agents_row_a.y-agents_row_b.y)**2)**0.5
-
-
+    
 #Creating iteration function for animation
 carry_on = True	
 def update(frame_number):
@@ -141,7 +154,7 @@ def gen_function(b = [0]):
 
 #Create function for wolves that eat some nearest sheeps (agents)        
 def wolves():
-    print("===============================================\nAdding Wolves\n===============================================")
+    print("\n===============================================\nAdding Wolves\n===============================================\n")
     wolf_x=random.randint(0,99)
     wolf_y=random.randint(0,99)
     print("Wolf's position (x y) : ",wolf_x,wolf_y)
@@ -150,20 +163,21 @@ def wolves():
         wolf_dist = ((wolf_x-agents[i].x)**2+(wolf_y-agents[i].y)**2)**0.5
         if (wolf_dist < 50):
             agents.remove(agents[i])
-        else:       
-            print("Agent-",i,", Distance with the wolf:", round(wolf_dist,2))
-
+        else: 
+            print(agents[i], "Distance with the wolf:", round(wolf_dist,2))
+    
 #Create function that allows agents' breeding            
 def breed():
-    print("===============================================\nBreeding Agents\n===============================================")
-    print("Additional agents after breeding:")
-    for i in range(30,51):
-        x = random.randint(0,99)
-        y = random.randint(0,99)
-        agents.append(agentframework.Agent(i,agents,environment,y,x))
-        print ("Agent-",i, ",store =",agents[i].store,",Position (x y) : ",agents[i].x,agents[i].y)
-        num_of_agents == i
-           
+  init_position()
+  print("===============================================\nBreeding Agents\n===============================================")
+  print("Additional agents after breeding:")
+  for i in range(30,51):
+      x = random.randint(0,99)
+      y = random.randint(0,99)
+      agents.append(agentframework.Agent(i,agents,environment,y,x))
+      print(agents[i])        
+      num_of_agents = i
+        
 #calling animation module
 # animation = matplotlib.animation.FuncAnimation(
 #     fig, update, interval=1, repeat=False, frames=num_of_iterations)
@@ -173,25 +187,7 @@ def breed():
 # for i in range(num_of_agents):  
 #     print(agents[i])
         #print("Agent-",i,":",agents[i].x,agents[i].y)
-    
-#call the distance function for all agents
-dist=[]
-print("\n\nDistance Between 2 Agents:")
-for i in range(num_of_agents):
-    for j in range(num_of_agents):
-        if i!=j and i<j:
-            distance_between(agents[i],agents[j])
-            print("agent-",i,"and agent-",j,"is:",round(distance_between(agents[i],agents[j]),2))
-            dist.append(distance_between(agents[i],agents[j]))
-        else:
-            pass
-    
-#show max and min distances
-print("\nmax distance:",round(max(dist),2))
-print("min distance:",round(min(dist),2))  
- 
-end = time.process_time()
-print("\nprocessing time:",str(end-start))
+
 
 #Create a csv file as an output from the program
 with open('dataout.csv', 'w', newline='') as f2:
@@ -207,9 +203,18 @@ canvas._tkcanvas.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 menu = tkinter.Menu(root)
 root.config(menu=menu)
 model_menu = tkinter.Menu(menu)
+agents_menu = tkinter.Menu(menu)
+menu.add_cascade(label="Agents", menu=agents_menu)
+agents_menu.add_command(label="Initial Position", command=init_position)
+agents_menu.add_command(label="Initial Distance", command=print_distance) 
+agents_menu.add_command(label="Communication Test", command=com_test)
 menu.add_cascade(label="Model", menu=model_menu)
 model_menu.add_command(label="Run Model", command=run)  
-model_menu.add_command(label="Add A Wolf", command=wolves)  #additional button
-model_menu.add_command(label="Breed Agents", command=breed) #additional button 
+model_menu.add_command(label="Add A Wolf", command=wolves) 
+model_menu.add_command(label="Breed Agents", command=breed)
+
+end = time.process_time()
+print("\n=====================================\nnum_of_agents = 30\nnum_of_iterations = 100\nneighbourhood = 20\nprocessing time:",
+      str(end-start),"\n=====================================")
 
 tkinter.mainloop()
