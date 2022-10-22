@@ -80,3 +80,13 @@ class Agent():
             if (self.store < 40) and (self.agents[i].store > 40):
                 self.store += 20
                 self.agents[i].store -= 20
+                
+    def wolves(self,wolf_x,wolf_y):
+        # wolf_x=random.randint(0,99)
+        # wolf_y=random.randint(0,99)
+        wolf_dist = ((wolf_x-self.x)**2+(wolf_y-self.y)**2)**0.5
+        if (wolf_dist < 50):
+            print("eaten by wolf")
+            #self.remove(self) #need double check
+        else: 
+            print(self, "Dist with the wolf:", wolf_dist)

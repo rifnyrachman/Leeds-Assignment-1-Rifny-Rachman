@@ -153,18 +153,15 @@ def gen_function(b = [0]):
         a = a + 1
 
 #Create function for wolves that eat some nearest sheeps (agents)        
-def wolves():
+def print_wolves():
     print("\n===============================================\nAdding Wolves\n===============================================\n")
     wolf_x=random.randint(0,99)
     wolf_y=random.randint(0,99)
     print("Wolf's position (x y) : ",wolf_x,wolf_y)
-    print("Remaining agents:")
     for i in range(num_of_agents):
-        wolf_dist = ((wolf_x-agents[i].x)**2+(wolf_y-agents[i].y)**2)**0.5
-        if (wolf_dist < 50):
-            agents.remove(agents[i])
-        else: 
-            print(agents[i], "Distance with the wolf:", round(wolf_dist,2))
+        agents[i].wolves(wolf_x,wolf_y)
+    # for i in range(num_of_agents):
+    #     print(agents[i])
     
 #Create function that allows agents' breeding            
 def breed():
@@ -210,7 +207,7 @@ agents_menu.add_command(label="Initial Distance", command=print_distance)
 agents_menu.add_command(label="Communication Test", command=com_test)
 menu.add_cascade(label="Model", menu=model_menu)
 model_menu.add_command(label="Run Model", command=run)  
-model_menu.add_command(label="Add A Wolf", command=wolves) 
+model_menu.add_command(label="Add A Wolf", command=print_wolves) 
 model_menu.add_command(label="Breed Agents", command=breed)
 
 end = time.process_time()
