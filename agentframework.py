@@ -87,6 +87,10 @@ class Agent():
         wolf_dist = ((wolf_x-self.x)**2+(wolf_y-self.y)**2)**0.5
         if (wolf_dist < 50):
             print("eaten by wolf")
-            #self.remove(self) #need double check
+            del self.agents #delete eaten agents
+            self.store = -99
+            self.x = 0
+            self.y = 0
+            
         else: 
-            print(self, "Dist with the wolf:", wolf_dist)
+            print(self, ", Dstnc with wolf:", round(wolf_dist,2))

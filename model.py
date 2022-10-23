@@ -73,7 +73,7 @@ for i in range(num_of_agents):
     agents.append(agentframework.Agent(i,agents,environment,y,x))
     
 def init_position():    
-    print("\n===============================================\nAgents' Initial Positions:\n===============================================\n")
+    print("\n===============================================\nAgents' Positions:\n===============================================\n")
     for i in range(num_of_agents):
         print(agents[i])
     
@@ -87,12 +87,13 @@ def print_distance():
     print("\n===============================================\nDistances Between 2 Agents:\n===============================================\n")
     for i in range(num_of_agents):
         for j in range(num_of_agents):
-            if i!=j and i<j:
+            if (i!=j and i<j) and (agents[i].store >= 0):
                 distance_between = ((agents[i].x-agents[j].x)**2+(agents[i].y-agents[j].y)**2)**0.5
                 print("agent-",i,"and agent-",j,"is:",round(distance_between,2))
                 dist.append(distance_between)
             else:
                 pass
+                # print("agent-",i,"and agent-",j,"is: N/A (agent's been eaten)")
     
 #show max and min distances
     print("\nmax distance:",round(max(dist),2))
@@ -158,11 +159,9 @@ def print_wolves():
     wolf_x=random.randint(0,99)
     wolf_y=random.randint(0,99)
     print("Wolf's position (x y) : ",wolf_x,wolf_y)
-    for i in range(num_of_agents):
+    for i in range(len(agents)):
         agents[i].wolves(wolf_x,wolf_y)
-    # for i in range(num_of_agents):
-    #     print(agents[i])
-    
+
 #Create function that allows agents' breeding            
 def breed():
   init_position()
@@ -202,8 +201,8 @@ root.config(menu=menu)
 model_menu = tkinter.Menu(menu)
 agents_menu = tkinter.Menu(menu)
 menu.add_cascade(label="Agents", menu=agents_menu)
-agents_menu.add_command(label="Initial Position", command=init_position)
-agents_menu.add_command(label="Initial Distance", command=print_distance) 
+agents_menu.add_command(label="Position", command=init_position)
+agents_menu.add_command(label="Distance", command=print_distance) 
 agents_menu.add_command(label="Communication Test", command=com_test)
 menu.add_cascade(label="Model", menu=model_menu)
 model_menu.add_command(label="Run Model", command=run)  
@@ -211,7 +210,8 @@ model_menu.add_command(label="Add A Wolf", command=print_wolves)
 model_menu.add_command(label="Breed Agents", command=breed)
 
 end = time.process_time()
-print("\n=====================================\nnum_of_agents = 30\nnum_of_iterations = 100\nneighbourhood = 20\nprocessing time:",
+print("=====================================")
+print("INITIAL SETUP:\nnum_of_agents = 30\nnum_of_iterations = 100\nneighbourhood = 20\nprocessing time:",
       str(end-start),"\n=====================================")
 
 tkinter.mainloop()
