@@ -15,7 +15,7 @@ This program is a simulation of multiple agents setup. Agents would be generated
 1. Open model.py window
 2. Run the program
 3. Choose feature from the GUI
-4. Graphical and animated output would pop up, while informative text (including statistics summary would appear on the console window)
+4. Graphical and animated output would pop up, while informative text (including statistics summary) would appear on the console window.
 
 ## Program Features
 ### Initiate this program
