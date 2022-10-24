@@ -1,7 +1,12 @@
 """
 Created on Fri Oct  7 04:41:45 2022
 
-@author: rifny
+@author: rifny rachman
+Version: 1.0
+
+ABOUT: This program is a supporting file to model.py, to enable the agent-based
+model runs properly. Users should run the main file model.py to access a fully 
+functioned program.
 """
 
 import random
@@ -90,12 +95,11 @@ class Agent():
     def wolves(self,wolf_x,wolf_y):
         #calculate agent's distance with the wolf
         wolf_dist = ((wolf_x-self.x)**2+(wolf_y-self.y)**2)**0.5
-        if (wolf_dist < 50): #wolf eats agent if the distance is less than 50
+        if (wolf_dist < 50) or (self.store<0): #wolf eats agent if the distance is less than 50
             print("eaten by wolf")
-            del self.agents # to delete eaten agents from agents list
             self.store = -99 #as a penalty in case del function does not work
             self.x = 0
             self.y = 0
-            
+            del self # to delete eaten agents from agents list
         else: 
             print(self, ", Dstnc with wolf:", round(wolf_dist,2))
