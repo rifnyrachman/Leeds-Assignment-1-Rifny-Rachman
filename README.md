@@ -11,6 +11,11 @@ This program is a simulation of multiple agents setup. Agents would be generated
 2. Unzip the downloaded folder
 3. Open model.py and agentframework.py using Spyder
 
+### Setup Preparation (for Spyder)
+Hit the following buttons:
+1. Tools button on top of window -> Preferences -> IPython Console -> Graphics
+2. Set Backend to be Tkinter, then click OK.
+
 ### Running This Program
 1. Open model.py window
 2. Run the program
