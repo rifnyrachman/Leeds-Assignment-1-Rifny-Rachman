@@ -1,5 +1,5 @@
 # Agent-Based Modelling Program
-(Word count: 510)
+(Word count: 580)
 
 This program is a simulation of multiple agents set up. Agents would be generated from web scraping, and then the program lets them interact, both with other agents and their environment. A Graphical User Interface has been generated to enable users to intervene in the program setup, for example by adding wolves (predator agents), breeding agents, etc. An animated graphic is given when users are running the program, as well as the statistics, informative text output, and 3D Visualization.
 
@@ -10,13 +10,20 @@ This program is a simulation of multiple agents set up. Agents would be generate
 
 ### Installation
 1. Download the whole files in this repository: code >> download zip
-2. Unzip the downloaded folder. This folder contains
-   `model.py`, `agentframework.py`, `documentation.pdf`, `README.md`, `LICENSE.md`, `in.txt`, `dataout.csv`
+2. Unzip the downloaded folder. This folder contains:
+* `model.py`: The main code source of this program that would be run to access the program functionality.
+* `agentframework.py`: Another code source for agents that is employed in the main code source.
+* `documentation.pdf`: Validation evidence as well as further user guidance to this program.
+* `README.md`: This file, which is a brief description and main guidance about this program.
+* `LICENSE.md`: A guidance to re-use or develop this program.
+* `in.txt`: Data used for model's environment.
+* `dataout.csv`: Printed out CSV file from the program.
+
 3. Open `model.py` and `agentframework.py` using Spyder
 
 ### Setup Preparation (for Spyder)
 Hit the following buttons:
-1. Tools button on top of _window_ -> _Preferences_ -> _IPython Console_ -> _Graphics_
+1. _Tools_ button on top of window -> _Preferences_ -> _IPython Console_ -> _Graphics_
 2. Set Backend to _Tkinter_, then click _OK_.
 
 ### Running This Program
@@ -45,11 +52,11 @@ Below is the function of each feature:
 * _Run model_: to apply iterated behaviour to the agents. This includes moving the agents, eating from environment, and sharing the store with neighbours. Along with the iteration, there will be a pop up animation to illustrate the agents movements.
 
 **Note**: Several behaviours have been modified, such as agents' movement is nimbler when they have more stores, agents get sick (throw up all stores) when they eat more than a certain value, and agents steal from their neighbours when their store is getting low.
-* Add a wolf: to add a predator agent that eats some closest agents.
+* _Add a wolf_: to add a predator agent that eats some closest agents.
 
 **Note**: Click multiple times to add more wolves
-* Breed agents: to add new agents
-* 3D Visualisation: to show the latest agents' status in the 3D Graphical representation
+* _Breed agents_: to add new agents
+* _3D Visualisation_: to show the latest agents' status in the 3D Graphical representation
 
 ### Limitation
 While most of the features allow re-run to get the most updated representation, only the animation feature from "Run model" could not be re-run.
