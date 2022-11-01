@@ -1,4 +1,6 @@
 # Agent-Based Modelling Program
+(Word count: 491)
+
 This program is a simulation of multiple agents setup. Agents would be generated from web scraping, then the program lets them to interact, both with other agents and their environment. A Graphical User Interface has been generated to enable users intervene in the program setup, for example by adding wolves (predator agents), breeding agents, etc. An animated graphic is given when users are running the program, as well as the statistics, informative text output, and 3D Visualization.
 
 ## How to Install and Run This Program
@@ -53,6 +55,6 @@ While most of features allow re-run to get the most updated representation, only
 
 ## Further Documents
 ### Program Documentation
-A documentation file while running this program is given in the documentation.word. This file could be a further guidance like user manual and a validation of the model.
+A documentation file while running this program is given in the documentation.pdf. This file could be a further guidance like user manual and a validation of the model.
 ### License
 A license file is provided as a guideline for programmer fellows who are willing to use codes in this program.
